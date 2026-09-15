@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>旅行手册需求问卷</title>
+  <style>
+    :root{--green:#8f493e;--green-dark:#5a3931;--paper:#f5ede3;--card:#fffaf3;--ink:#3d302b;--muted:#7b6b61;--gold:#c9954b;--line:#e2d4c7}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    header{padding:58px max(22px,calc((100% - 980px)/2));color:#fff;background:radial-gradient(circle at 82% 20%,#c27a5e44,transparent 30%),linear-gradient(135deg,#51372f,#a75a48)}
+    header small{color:#f2d6a4;letter-spacing:.16em}h1,h2{font-family:Georgia,"Songti SC",serif;font-weight:500;line-height:1.15}h1{font-size:clamp(42px,8vw,78px);margin:28px 0 14px}header p{max-width:620px;color:#f6e7dc}
+    main{width:min(980px,calc(100% - 32px));margin:28px auto 70px}.card{padding:clamp(22px,4vw,44px);margin:18px 0;background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 12px 34px #75483a12}
+    h2{font-size:clamp(28px,5vw,44px);margin:0 0 8px}.intro{color:var(--muted);margin-top:0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 22px;margin-top:26px}.full{grid-column:1/-1}.field{display:grid;gap:7px}.hint{color:var(--muted);font-size:12px;font-weight:400}label,.field>span{font-weight:700;font-size:14px}
+    input,select,textarea{width:100%;padding:12px 13px;border:1px solid #d2bfb1;border-radius:10px;background:#fff;color:var(--ink);font:inherit}textarea{min-height:100px;resize:vertical}.choices{display:flex;flex-wrap:wrap;gap:9px}.choices label{padding:9px 13px;border:1px solid #d2bfb1;border-radius:999px;font-weight:500;cursor:pointer}.choices input{position:absolute;opacity:0}.choices input:checked+label{color:#fff;background:var(--green);border-color:var(--green)}
+    .actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.button{padding:12px 18px;border:0;border-radius:999px;background:var(--green);color:#fff;font-weight:700;cursor:pointer}.button.secondary{background:transparent;color:var(--green);border:1px solid var(--green)}#result{display:none}#result.show{display:block}.output{white-space:pre-wrap;padding:18px;background:#f7eee5;border:1px solid var(--line);border-radius:12px;font-size:14px}.status{color:var(--green);font-size:13px}footer{text-align:center;color:var(--muted);font-size:13px;padding:0 16px 36px}
+    @media(max-width:650px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.card{border-radius:16px}header{padding:42px 20px}main{width:min(100% - 24px,600px)}}
+  </style>
+</head>
+<body>
+  <header><small>TRAVEL HANDBOOK · QUICK INTAKE</small><h1>先说清楚，<br>再开始规划。</h1><p>填写目的地和真正影响路线的偏好。没有填写的内容会按稳妥、顺路的默认方案处理。</p></header>
+  <main>
+    <form id="form">
+      <section class="card"><h2>基础信息</h2><p class="intro">目的地是必填项；日期不确定时可以只填写天数。</p><div class="grid">
+        <div class="field full"><label for="destination">目的地 *</label><input id="destination" name="destination" required placeholder="例如：巴黎、东京关西、意大利北部"></div>
+        <div class="field"><label for="start">出发日期 <span class="hint">可选，YYYY-MM-DD</span></label><input id="start" name="start" type="date"></div>
+        <div class="field"><label for="end">返回日期 <span class="hint">可选，YYYY-MM-DD</span></label><input id="end" name="end" type="date"></div>
+        <div class="field"><label for="days">旅行天数 <span class="hint">日期未定时填写</span></label><input id="days" name="days" type="number" min="1" max="60" placeholder="例如：7"></div>
+        <div class="field"><label for="travelers">同行人数</label><input id="travelers" name="travelers" type="number" min="1" max="30" value="2"></div>
+        <div class="field"><label for="pace">旅行节奏</label><select id="pace" name="pace"><option>均衡偏轻松</option><option>轻松</option><option>均衡</option><option>充实</option></select></div>
+        <div class="field"><label for="budget">预算定位 <span class="hint">可选</span></label><select id="budget" name="budget"><option>未指定，按目的地主流方案</option><option>经济实用</option><option>舒适型</option><option>品质型</option><option>高端型</option></select></div>
+        <div class="field full"><label for="budgetAmount">整趟总预算 <span class="hint">可选</span></label><input id="budgetAmount" name="budgetAmount" placeholder="例如：两人总计 20,000 元，不含购物"></div>
+      </div></section>
+      <section class="card"><h2>偏好与限制</h2><p class="intro">全部可选；只填写你认为会影响路线的内容。</p><div class="grid">
+        <div class="field full"><span>兴趣重点 <span class="hint">可多选</span></span><div class="choices">
+          <input id="i1" type="checkbox" name="interest" value="经典景点"><label for="i1">经典景点</label>
+          <input id="i2" type="checkbox" name="interest" value="美食"><label for="i2">美食</label>
+          <input id="i3" type="checkbox" name="interest" value="购物"><label for="i3">购物</label>
+          <input id="i4" type="checkbox" name="interest" value="自然风景"><label for="i4">自然风景</label>
+          <input id="i5" type="checkbox" name="interest" value="历史文化"><label for="i5">历史文化</label>
+          <input id="i6" type="checkbox" name="interest" value="城市漫游"><label for="i6">城市漫游</label>
+          <input id="i7" type="checkbox" name="interest" value="拍照与氛围"><label for="i7">拍照与氛围</label>
+          <input id="i8" type="checkbox" name="interest" value="特色体验"><label for="i8">特色体验</label>
+          <input id="i9" type="checkbox" name="interest" value="咖啡与甜品"><label for="i9">咖啡与甜品</label>
+          <input id="i10" type="checkbox" name="interest" value="设计与展览"><label for="i10">设计与展览</label>
+          <input id="i11" type="checkbox" name="interest" value="夜景与酒吧"><label for="i11">夜景与酒吧</label>
+          <input id="i12" type="checkbox" name="interest" value="亲子"><label for="i12">亲子</label>
+          <input id="i13" type="checkbox" name="interest" value="户外运动"><label for="i13">户外运动</label>
+        </div></div>
+        <div class="field"><label for="must">特别想去</label><textarea id="must" name="must" placeholder="地点、餐厅或活动"></textarea></div>
+        <div class="field"><label for="avoid">明确不想去</label><textarea id="avoid" name="avoid" placeholder="例如：不早起、不去主题乐园"></textarea></div>
+        <div class="field full"><label for="constraints">健康、饮食、行动或时间限制</label><textarea id="constraints" name="constraints" placeholder="例如：海鲜过敏、控制步行量、需要无障碍路线"></textarea></div>
+        <div class="field full"><label for="notes">其他说明</label><textarea id="notes" name="notes" placeholder="例如：第一次去，希望经典景点不要遗漏"></textarea><span class="hint">如果已经订了机票或酒店，可以在这里说明航班号、酒店名称和入住日期；也可以稍后补充。</span></div>
+      </div></section>
+      <section class="card"><h2>信息够用了，就交给 Agent。</h2><p class="intro">已经决定去哪里，直接整理手册需求。</p><div class="actions"><button class="button" type="submit">整理手册需求</button><button class="button secondary" id="clear" type="button">清空</button><span class="hint">填写内容会保存在当前设备</span></div></section>
+    </form>
+    <section class="card" id="result"><h2>你的旅行手册需求</h2><p class="intro">复制下面内容，发给支持 Travel Handbook skill 的 Agent。</p><div class="output" id="output"></div><div class="actions" style="margin-top:14px"><button class="button" id="copy" type="button">复制给 Agent</button><span class="status" id="status"></span></div></section>
+  </main><footer>Travel Handbook Intake · 信息仅保存在当前设备</footer>
+  <script>
+    const form=document.querySelector('#form'),key='travel-handbook-intake-v1',output=document.querySelector('#output');
+    const fields=[...form.querySelectorAll('input,select,textarea')];
+    const read=()=>{const d={};new FormData(form).forEach((v,k)=>{if(k==='interest')(d[k]??=[]).push(v);else d[k]=String(v).trim()});d.interest??=[];return d};
+    const save=()=>localStorage.setItem(key,JSON.stringify(read()));
+    const restore=()=>{try{const d=JSON.parse(localStorage.getItem(key)||'{}');fields.forEach(x=>{if(x.name==='interest')x.checked=(d.interest||[]).includes(x.value);else if(d[x.name]!=null)x.value=d[x.name]})}catch(e){}};
+    const make=()=>{const d=read(),date=d.start?(d.end?`${d.start} 至 ${d.end}`:`${d.start} 出发`):(d.days?`${d.days} 天，日期未定`:'日期与天数未定');return [`请使用 travel-handbook skill，为我生成一份完整的 ${d.destination||'指定目的地'} 旅行手册。`,'',`【基础信息】`,`旅行时间：${date}`,`同行人数：${d.travelers||'未填写，按 2 名成人处理'}`,`旅行节奏：${d.pace||'均衡偏轻松'}`,'',`【预算与兴趣】`,`预算定位：${d.budget||'未指定'}`,`整趟总预算：${d.budgetAmount||'未指定'}`,`兴趣重点：${d.interest.length?d.interest.join('、'):'未指定，按目的地主流首次旅行方案安排'}`,'',`【个性化要求】`,`特别想去：${d.must||'未指定'}`,`明确不想去：${d.avoid||'未指定'}`,`限制与照顾：${d.constraints||'未指定'}`,`其他说明：${d.notes||'未指定'}`,'',`请把我选择的兴趣真正用于筛选地点和安排时间：主要行程中约三分之二的可选活动应直接匹配这些兴趣，避免为了填满模块加入低相关、重复或到处都能体验的项目。未指定偏好时，在保留首次到访经典内容的基础上，适度偏向中国年轻旅行者普遍更感兴趣的美食、潮流街区、设计审美、购物、拍照氛围和轻松夜间体验；不要强塞网红点，也不要为此增加额外的大范围搜索。所有未填写内容使用可靠、路线顺畅的默认方案。动态价格与开放信息不能可靠核验时使用保守表达，不得编造。`,'',`请根据以上信息研究并生成路线顺畅、数据可核验的旅行手册。未提供的交通和住宿保持待确认；动态开放时间、预约、票价、交通和天气必须标注来源与核验状态；没有可靠依据的内容不要编造。`].join('\n')};
+    fields.forEach(x=>x.addEventListener('input',save));fields.forEach(x=>x.addEventListener('change',save));restore();
+    form.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity())return;output.textContent=make();document.querySelector('#result').classList.add('show');document.querySelector('#result').scrollIntoView({behavior:'smooth'});save()});
+    document.querySelector('#copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(output.textContent);document.querySelector('#status').textContent='已复制，可以发给 Agent。'}catch(e){document.querySelector('#status').textContent='请手动选择并复制。'}});
+    document.querySelector('#clear').addEventListener('click',()=>{if(confirm('清空当前问卷内容？')){form.reset();localStorage.removeItem(key);output.textContent='';document.querySelector('#result').classList.remove('show')}});
+  </script>
+</body>
+</html>
