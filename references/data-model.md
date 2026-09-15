@@ -28,4 +28,8 @@
 
 `budget` 没有可追溯金额或明确估算口径时不渲染。`image.media_class` 为 `atmosphere` 时必须在页面标注为示意图，不能作为实体实景使用。
 
-体验实体使用 `type: "experience"`，除通用地点字段外，还应记录：`category`、`recommended_day` 或 `scheduled_label
+体验实体使用 `type: "experience"`，除通用地点字段外，还应记录：`category`、`recommended_day` 或 `scheduled_label`、`fit_note`、`hours`、`closed_days`、`reservation`（如适用）、精确坐标，以及含 `file`、`source_page`、`license`、`checked_at` 的准确图片记录。`module_groups.experiences` 是唯一的页面分组来源；未进入分组或未通过图片核验的候选不渲染为体验卡。
+
+购物实体使用 `type: "shop"`，还应记录 `category`、`scheduled_label` 或路线关联、`brand_highlights`、`buying_tip`、营业/闭店信息、精确坐标和准确图片来源。`module_groups.shopping` 是门店分组来源；`module_groups.shopping_goodies` 保存产品类型级的伴手礼建议，不把产品类型伪装成地点实体。
+
+`module_groups.travel_notes` 是按行程生成的可变分组数组。天气组在使用具体预报结论时需额外记录预报来源和 `checked_at`；不在预报窗口内时，记录下一次复核动作而非伪造天气结论。
