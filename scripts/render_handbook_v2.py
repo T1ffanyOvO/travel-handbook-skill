@@ -101,7 +101,7 @@ def render_html(profile, places, out):
                     cards.append("<div class='transport-card'><span>↓</span><b>"+esc(places[stop["place_id"]]["name"])+" → "+esc(places[next_id]["name"])+"</b><em>"+mode_label+" · "+f"{segment['distance_meters']/1000:.1f}"+" km · 约 "+str(minutes)+" 分钟</em></div>")
         snapshot = out / "map-snapshots" / f"day-{i:02d}.png"
         has_snapshot = bool(route_days.get(i, {}).get("snapshot_file")) and snapshot.exists()
-        map_html = "<img style='width:100%;height:auto' src='map-snapshots/"+snapshot.name+"' alt='"+esc(day.get("theme"))+"真实地图路线截图'>" if has_snapshot else map_svg(day, places)
+        map_html = "<img style='width:100%;height:auto' src='map-snapshots/"+snapshot.name+"?v=20260916-map' alt='"+esc(day.get("theme"))+"真实地图路线截图'>" if has_snapshot else map_svg(day, places)
         all_points_url = day_map_url(day)
         day_map_action = "<p class='day-map-action'><a href='"+esc(all_points_url)+"' target='_blank'>当日全部地点地图 ↗</a><span>在地图中查看当天所有点位与路线</span></p>" if all_points_url else ""
         empty_note = ""
@@ -176,7 +176,7 @@ def render_html(profile, places, out):
     shopping_groups = "<details class='fold shopping-chapter' open><summary><span><b>顺路逛的店</b></span><i aria-hidden='true'>＋</i></summary><div class='shopping-grid'>"+"".join(shopping_card(place) for place in shopping_items)+"</div></details>" if shopping_items else ""
     goodies = profile.get("module_groups", {}).get("shopping_goodies", [])
     goodie_cards = "".join("<article class='entity-card entity-card--goodie goodie-card'><div class='card-body'><p class='card-meta goodie-meta'>"+esc(item.get("category"))+"</p><h3 class='card-title'>"+esc(item.get("title"))+"</h3><p class='card-description'>"+esc(item.get("description"))+"</p><p class='card-description'><b>为什么值得带走：</b>"+esc(item.get("why_buy"))+"</p><p class='card-description'><b>适合送给：</b>"+esc(item.get("best_for"))+"</p><p class='card-description'><b>哪里买：</b>"+esc(item.get("where_to_buy"))+"</p><small class='card-meta'>"+esc(item.get("buying_tip"))+"</small></div></article>" for item in goodies)
-    goodies_html = "<details class='fold shopping-chapter goodies' open><summary><span><b>值得带走的当地好物</b><small>轻便、可分享，也不会脱离行程</small></span><i aria-hidden='true'>＋</i></summary><div class='goodie-grid'>"+goodie_cards+"</div></details>" if goodie_cards else ""
+    goodies_html = "<details class='fold shopping-chapter goodies' open><summary><span><b>值得带走的当地好物</b></span><i aria-hidden='true'>＋</i></summary><div class='goodie-grid'>"+goodie_cards+"</div></details>" if goodie_cards else ""
     shopping_html = module_shell("shopping", "shopping", "购物", "把购买放在已经经过的街区；不为了清单跨区折返。", shopping_groups+goodies_html) if shopping_groups or goodies_html else ""
     language_model = profile.get("module_groups", {}).get("language", {})
     def language_set(keyword_groups, phrase_groups, label, open_attr=""):
@@ -189,9 +189,9 @@ def render_html(profile, places, out):
             rows = "".join("<article class='entity-card entity-card--phrase'><span class='card-meta'>"+str(index).zfill(2)+"</span><div class='card-body'><b class='card-title'>"+esc(item.get("sentence"))+"</b>"+("<small class='card-meta'>"+esc(item.get("reading"))+"</small>" if item.get("reading") else "")+"<em class='card-description'>"+esc(item.get("meaning"))+"</em></div><button type='button' class='card-actions copy-phrase' data-copy='"+esc(item.get("sentence"))+"'>复制</button></article>" for index, item in enumerate(group.get("items", []), 1))
             phrases.append("<details class='fold phrase-chapter' open><summary><b>"+esc(group.get("title"))+"</b><span>"+str(len(group.get("items", [])))+" 句</span><i aria-hidden='true'>＋</i></summary><div class='phrase-items'>"+rows+"</div></details>")
         if not vocab and not phrases: return ""
-        return "<details class='fold language-edition'"+open_attr+"><summary><span><b>语言</b></span><i aria-hidden='true'>＋</i></summary><div class='language-body'><div class='language-kicker'>高频关键词</div><div class='vocab-grid'>"+"".join(vocab)+"</div><div class='language-kicker'>现场高频句</div><div class='phrase-groups'>"+"".join(phrases)+"</div></div></details>"
+        return "<details class='fold language-edition'"+open_attr+"><summary><span><b>"+esc(label)+"</b></span><i aria-hidden='true'>＋</i></summary><div class='language-body'><div class='language-kicker'>高频关键词</div><div class='vocab-grid'>"+"".join(vocab)+"</div><div class='language-kicker'>现场高频句</div><div class='phrase-groups'>"+"".join(phrases)+"</div></div></details>"
     local_language = language_set(language_model.get("keyword_groups", []), language_model.get("phrase_groups", []), language_model.get("local_label", "当地语言"), " open")
-    english_language = language_set(language_model.get("english_keyword_groups", []), language_model.get("english_phrase_groups", []), "英语备用", " open")
+    english_language = language_set(language_model.get("english_keyword_groups", []), language_model.get("english_phrase_groups", []), "英语", " open")
     language_html = module_shell("language", "language", "语言", "先用当地语言问候；需要时切换到简洁英语。每句可一键复制。", local_language+english_language) if local_language or english_language else ""
     notes_groups = []
     for index, group in enumerate(profile.get("module_groups", {}).get("travel_notes", [])):

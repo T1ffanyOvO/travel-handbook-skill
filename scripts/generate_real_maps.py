@@ -12,10 +12,11 @@ import time
 import urllib.parse
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 TILE_SIZE = 256
 ZOOM = 14
+MAP_SIZE = (960, 540)
 TILE_URL = "https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
 OSRM_URL = "https://router.project-osrm.org/route/v1/"
 HEADERS = {"User-Agent": "travel-handbook-skill-v1/0.1 (static travel handbook map build)"}
@@ -117,7 +118,10 @@ def render_day(stops: list[dict], places: dict[str, dict], target: Path) -> list
         label(draw, (px-origin[0], py-origin[1]), number)
     draw.rounded_rectangle((12, 12, 300, 46), radius=9, fill="#ffffff", outline="#d7d0c6")
     draw.text((24, 22), "道路路线 · OpenStreetMap / OSRM", fill="#37312b")
-    image.save(target, "PNG")
+    fitted = ImageOps.contain(image, MAP_SIZE)
+    canvas = Image.new("RGB", MAP_SIZE, "#f4efe5")
+    canvas.paste(fitted, ((MAP_SIZE[0] - fitted.width) // 2, (MAP_SIZE[1] - fitted.height) // 2))
+    canvas.save(target, "PNG")
     return segments
 
 
