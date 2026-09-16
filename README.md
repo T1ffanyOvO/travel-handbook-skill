@@ -16,3 +16,7 @@
 - `destination-profile.json`：结构化旅行数据
 - `map-snapshots/`：每日路线地图
 - PDF：按需生成
+
+## 示例
+
+巴黎旅行手册示例位于 `docs/`，可作为 GitHub Pages 的静态网站根目录。
