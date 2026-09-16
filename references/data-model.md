@@ -4,7 +4,8 @@
 
 ```json
 {
-  "trip": {"destination": "Paris", "start_date": "2026-09-28", "end_date": "2026-10-04", "travelers": "情侣", "rhythm": "relaxed", "interests": ["美食", "拍照", "街区漫步"]},
+  "visual_theme": "coastal",
+  "trip": {"destination": "Paris", "start_date": "2026-09-28", "end_date": "2026-10-04", "travelers": "2 人", "rhythm": "relaxed", "interests": ["美食", "拍照", "街区漫步"]},
   "places": [{"place_id": "louvre", "name": "卢浮宫", "type": "sight", "area": "巴黎中心", "address": "", "coordinates": {"latitude": 48.8606, "longitude": 2.3376}, "visit_minutes": 180, "reservation": "", "hours": "", "map_query": "Louvre Museum Paris", "source_url": "", "checked_at": "2026-09-13"}],
   "itinerary": [{"date": "2026-09-28", "theme": "", "reason": "", "place_ids": ["louvre"]}],
   "modules": {"food": [], "preparation": [], "notes": [], "shopping": [], "experiences": [], "language": []}
@@ -12,6 +13,8 @@
 ```
 
 `place_id` 是跨模块的稳定引用。网页、地图快照和 PDF 都应从这份数据读取。
+
+`visual_theme` 只允许 `coastal`、`forest` 或 `city`，缺省使用 `coastal`。它只决定主题色，不改变页面结构、字体、间距、圆角、图片比例或交互行为。
 
 行程日期约束：`trip.start_date`、`trip.end_date` 和 `trip.days` 必须相互一致；`itinerary` 必须按连续日期覆盖整个旅行区间，不能遗漏抵达日或离境日。抵达/离境交通与住宿入住/退房日期应引用同一日历，不在页面模板中另写日期。
 
