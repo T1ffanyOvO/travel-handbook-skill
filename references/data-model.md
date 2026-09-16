@@ -5,6 +5,7 @@
 ```json
 {
   "visual_theme": "coastal",
+  "map_provider": "google",
   "trip": {"destination": "Paris", "start_date": "2026-09-28", "end_date": "2026-10-04", "travelers": "2 人", "rhythm": "relaxed", "interests": ["美食", "拍照", "街区漫步"]},
   "places": [{"place_id": "louvre", "name": "卢浮宫", "type": "sight", "area": "巴黎中心", "address": "", "coordinates": {"latitude": 48.8606, "longitude": 2.3376}, "visit_minutes": 180, "reservation": "", "hours": "", "map_query": "Louvre Museum Paris", "source_url": "", "checked_at": "2026-09-13"}],
   "itinerary": [{"date": "2026-09-28", "theme": "", "reason": "", "place_ids": ["louvre"]}],
@@ -13,6 +14,8 @@
 ```
 
 `place_id` 是跨模块的稳定引用。网页、地图快照和 PDF 都应从这份数据读取。
+
+`map_provider` 只允许 `google` 或 `amap`。海外目的地默认 `google`，中国大陆目的地默认 `amap`；它只决定用户点击的地图入口，不决定构建阶段使用的静态路线截图服务。
 
 `visual_theme` 只允许 `coastal`、`forest` 或 `city`，缺省使用 `coastal`。它只决定主题色，不改变页面结构、字体、间距、圆角、图片比例或交互行为。
 
