@@ -9,7 +9,7 @@ description: 研究并生成数据驱动、可执行的个性化旅行手册静�
 
 ## 首次输入
 
-新请求或信息不完整时，打开 [assets/intake-questionnaire/index.html](assets/intake-questionnaire/index.html)，让用户填写基础信息并把页面生成的提示词发回。问卷要求用户填写目的地，不提供目的地推荐选项；只收集同行人数，不收集同行关系。用户已提供完整 brief 时可直接开始，不必重复打开问卷。
+Skill 首次启用或收到信息不完整的旅行请求时，打开 [assets/intake-questionnaire/index.html](assets/intake-questionnaire/index.html)，引导用户填写基础信息并把页面生成的提示词发回。问卷要求用户填写目的地，不提供目的地推荐选项；只收集同行人数，不收集同行关系。用户已提供完整 brief 时可直接开始，不必打开或重复打开问卷。
 
 ## 固定输出
 
