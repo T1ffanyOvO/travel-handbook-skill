@@ -41,3 +41,16 @@ a{color:var(--color-primary);text-decoration:none}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.adjust-link,.fold[open]>summary i,.day[open]>summary .chevron{transition:none}}
 .restaurant-card .card-media,.experience-card .card-media,.shopping-card .card-media{height:var(--media-card-height)}
 @media(max-width:700px){.restaurant-card .card-media,.experience-card .card-media,.shopping-card .card-media{height:var(--media-card-height-mobile)}}
+
+@media print{
+  body{background:var(--color-bg)!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .hero-cover{color:#fff8ec!important;background-color:var(--color-primary-dark)!important;background-image:var(--cover-image),linear-gradient(135deg,var(--color-primary-dark),var(--color-primary))!important;background-position:center!important;background-size:cover!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .hero-cover__shade{display:block!important}
+  .hero-cover__actions,.adjust-modal,.day-map-action,.status-banner{display:none!important}
+  details:not([open])> *:not(summary){display:block!important}
+  details>summary{list-style:none}
+  details>summary::-webkit-details-marker{display:none}
+  .day,.module,.experience-chapter,.shopping-chapter,.notes-chapter{break-inside:avoid}
+  input[type=checkbox]{appearance:none;width:14px;height:14px;border:1px solid var(--color-muted);border-radius:2px;position:relative;vertical-align:middle}
+  input[type=checkbox]:checked::after{content:'✓';position:absolute;left:1px;top:-5px;font-size:15px;color:var(--color-accent);font-weight:700}
+}
