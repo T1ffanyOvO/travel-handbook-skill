@@ -64,10 +64,12 @@ def render_html(profile, places, out):
         return "<section class='module'><h2>"+title_text+"</h2><div class='module-grid'>"+cards+"</div></section>"
     core = module("景点", places_by_type.get("sight", [])) + module("餐饮", places_by_type.get("restaurant", []))
     optional = module("购物", places_by_type.get("shop", [])) + module("体验", places_by_type.get("experience", []))
-    body = "<header><div>TRAVEL HANDBOOK · "+esc(trip.get("start_date"))+"—"+esc(trip.get("end_date"))+"</div><h1>"+esc(title)+"</h1><p>"+esc(trip.get("travelers"))+" · "+esc(trip.get("rhythm"))+" · "+esc("、".join(trip.get("interests", [])))+"</p><a class='download' href='travel-handbook.pdf' download>一键下载 PDF</a></header>"+"".join(days)+core+"<section class='module'><h2>准备清单</h2><ul><li>证件、签证/入境要求与旅行保险</li><li>预约景点和餐厅</li><li>交通、网络、支付和舒适步行鞋</li></ul></section>"+optional+"<section class='module'><h2>注意事项</h2><ul><li>开放时间、票价和预约规则以出发前复核为准。</li><li>地图快照中的距离为直线距离，除非另有说明。</li><li>网页和 PDF 使用同一份旅行数据生成。</li></ul></section><footer>来源与核验日期保留在各地点卡片中。</footer>"
+    body = "<header><div>TRAVEL HANDBOOK · "+esc(trip.get("start_date"))+"—"+esc(trip.get("end_date"))+"</div><h1>"+esc(title)+"</h1><p>"+esc(trip.get("travelers"))+" · "+esc(trip.get("rhythm"))+" · "+esc("、".join(trip.get("interests", [])))+"</p><button type='button' class='download' id='print-pdf'>一键打印/保存 PDF</button></header>"+"".join(days)+core+"<section class='module'><h2>准备清单</h2><ul><li>证件、签证/入境要求与旅行保险</li><li>预约景点和餐厅</li><li>交通、网络、支付和舒适步行鞋</li></ul></section>"+optional+"<section class='module'><h2>注意事项</h2><ul><li>开放时间、票价和预约规则以出发前复核为准。</li><li>地图快照中的距离为直线距离，除非另有说明。</li><li>网页打印内容使用当前页面的旅行数据和清单状态。</li></ul></section><footer>来源与核验日期保留在各地点卡片中。</footer>"
     design_system = ":root{--handbook-bg:#f4eee5;--handbook-surface:#fffaf3;--handbook-ink:#263b40;--handbook-primary:#1f6678;--handbook-accent:#b7654f;--handbook-gold:#c9954b;--handbook-line:#dfd2c4}body{background:var(--handbook-bg);color:var(--handbook-ink)}a{color:var(--handbook-primary)}header{background:linear-gradient(135deg,#173f4c,#267487)}.day,.module{background:var(--handbook-surface);border-color:var(--handbook-line)}.head>span{color:var(--handbook-accent)}.stop,.module-card{background:#faf2e8;border-left-color:#d4a15f}.download{background:var(--handbook-accent)}"
     design_system += ".map svg rect{fill:var(--handbook-surface)!important}.map svg polyline{stroke:var(--handbook-primary)!important}.map svg g{fill:var(--handbook-accent)!important}.map svg text{fill:var(--handbook-ink)!important}.map svg g text{fill:#fff!important}.module-card{color:var(--handbook-ink);border-color:var(--handbook-line)}"
-    (out/"index.html").write_text("<!doctype html><html lang='zh-CN'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>"+esc(title)+"旅行手册</title><style>"+css+design_system+"</style></head><body><main>"+body+"</main></body></html>", encoding="utf-8")
+    design_system += "@media print{body{background:var(--handbook-bg)!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}header{color:#fff8ec!important;background:linear-gradient(135deg,#173f4c,#267487)!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.download{display:none}.day,.module{box-shadow:none}details:not([open])>*:not(summary){display:block!important}}"
+    print_script = "<script>(function(){var b=document.getElementById('print-pdf');if(!b)return;var o=[];function r(){o.forEach(function(x){x.node.open=x.open});o=[]}b.addEventListener('click',function(){o=[];document.querySelectorAll('details').forEach(function(n){o.push({node:n,open:n.open});n.open=true});window.print()});window.addEventListener('afterprint',r)})();</script>"
+    (out/"index.html").write_text("<!doctype html><html lang='zh-CN'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>"+esc(title)+"旅行手册</title><style>"+css+design_system+"</style></head><body><main>"+body+"</main>"+print_script+"</body></html>", encoding="utf-8")
 
 def render_pdf(profile, places, out):
     from reportlab.pdfbase import pdfmetrics
@@ -96,7 +98,7 @@ def render_pdf(profile, places, out):
 def main():
     if len(sys.argv) != 3: raise SystemExit("usage: render_handbook.py destination-profile.json output-directory")
     profile = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8")); out = Path(sys.argv[2]); out.mkdir(parents=True, exist_ok=True)
-    profile, places = normalize(profile); render_html(profile, places, out); render_pdf(profile, places, out)
-    print(f"PASS rendered {out/'index.html'} and {out/'travel-handbook.pdf'}")
+    profile, places = normalize(profile); render_html(profile, places, out)
+    print(f"PASS rendered {out/'index.html'} with browser print/save PDF")
 
 if __name__ == "__main__": main()
